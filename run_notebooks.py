@@ -29,14 +29,17 @@ for p in projects:
             "name": 'python3'
         }
 
-    cwd = tempfile.mkdtemp()
-    tmps.append(cwd)
-    pipeline_converted = Path(cwd, 'pipeline.ipynb')
+    cwd = Path(tempfile.mkdtemp())
+    tmps.append(str(cwd))
+    pipeline_converted = cwd / 'pipeline.ipynb'
     pipeline_converted.write_text(nbformat.v4.writes(nb))
 
     out = str(p / 'pipeline.ipynb')
 
-    pm.execute_notebook(str(pipeline_converted), out, cwd=cwd)
+    # include requirements.txt
+    shutil.copy(str(p / 'requirements.txt'), str(cwd / 'requirements.txt'))
+
+    pm.execute_notebook(str(pipeline_converted), out, cwd=str(cwd))
 
 
 for tmp in tmps:

@@ -1,0 +1,5 @@
+name: kaggle
+
+dependencies:
+  - python=3.7
+  - pygraphviz
