@@ -1,3 +1,12 @@
+*.csv
+*.json
+*.tsv
+*.parquet
+*.feather
+
+data/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
