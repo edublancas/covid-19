@@ -1,0 +1,1 @@
+California COVID-19 hospitalizations data

@@ -1,10 +1,18 @@
 # # California COVID-19 Hospitalizations
 #
+# COVID-19 hospitalizations in California by county.
+#
+# ## Requirements
+
+# ! cat requirements.txt
+
 # ## Data sources
 #
 # COVID-19: https://data.chhs.ca.gov/dataset/california-covid-19-hospital-data-and-case-statistics
 #
 # Population: https://data.ca.gov/dataset/california-population-projection-by-county-age-gender-and-ethnicity
+#
+# ## Data cleaning
 
 # +
 import pandas as pd
@@ -19,6 +27,7 @@ from ploomber.tasks import DownloadFromURL, PythonCallable
 from ploomber.products import File
 
 # +
+# matplotlib config
 plt.style.use('ggplot')
 
 mpl.rcParams['axes.titlesize'] = 20
@@ -49,7 +58,7 @@ download_pop = DownloadFromURL(SOURCE_POP, File(
 
 # -
 
-# we then join the downloaded data
+# we then join the downloaded data to normalize using population by county
 def _join(upstream, product):
     """Join California COVID-19 hospitalizations with population data
     """
@@ -80,12 +89,14 @@ join = PythonCallable(_join, File(ROOT / 'joined.csv'), dag, name='joined')
 # summary table
 dag.status()
 
-# plot
+# plot. NOTE: pygraphviz is required to plot, easiest way to install is via "conda install pygraphviz"
 path = dag.plot()
 Image(filename=path)
 
 # run all tasks
 dag.build()
+
+# ## Hospitalizations per 100,000 people
 
 # load joined data
 m_recent = pd.read_csv(str(dag['joined']))
