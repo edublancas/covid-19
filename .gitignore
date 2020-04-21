@@ -5,7 +5,7 @@
 *.parquet
 *.feather
 
-data/
+output/
 
 
 # Byte-compiled / optimized / DLL files
